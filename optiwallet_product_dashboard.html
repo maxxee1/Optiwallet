@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#080c14;
+  --surface:#0d1422;
+  --surface2:#131d2e;
+  --border:#1e2d45;
+  --accent:#00d4ff;
+  --accent2:#7c3aed;
+  --accent3:#10b981;
+  --warn:#f59e0b;
+  --text:#e2e8f0;
+  --muted:#64748b;
+  --card:#111827;
+}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
+
+/* NAV */
+nav{display:flex;align-items:center;justify-content:space-between;padding:18px 40px;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;background:rgba(8,12,20,0.92);backdrop-filter:blur(12px)}
+.logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.badge{background:linear-gradient(135deg,var(--accent2),var(--accent));padding:4px 12px;border-radius:20px;font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+.tabs{display:flex;gap:4px;background:var(--surface);border-radius:10px;padding:4px}
+.tab{padding:7px 16px;border-radius:7px;font-size:.82rem;cursor:pointer;border:none;background:none;color:var(--muted);font-family:'DM Sans',sans-serif;transition:all .2s}
+.tab.active{background:var(--surface2);color:var(--text);font-weight:500}
+
+/* SECTIONS */
+.section{display:none;padding:36px 40px;animation:fadeIn .3s ease}
+.section.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* HERO */
+.hero{text-align:center;padding:60px 20px 40px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:600px;height:300px;background:radial-gradient(ellipse,rgba(0,212,255,.12) 0%,transparent 70%);pointer-events:none}
+.hero h1{font-family:'Syne',sans-serif;font-size:3.2rem;font-weight:800;line-height:1.1;margin-bottom:16px}
+.hero h1 span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{color:var(--muted);font-size:1.05rem;max-width:520px;margin:0 auto 32px;line-height:1.7}
+.coming-soon{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--accent);color:var(--accent);padding:10px 24px;border-radius:30px;font-size:.88rem;font-weight:500;letter-spacing:.05em}
+.dot{width:7px;height:7px;background:var(--accent);border-radius:50%;animation:pulse 1.4s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+
+/* GRID CARDS */
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:1fr 1fr}
+.g3{grid-template-columns:repeat(3,1fr)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px;transition:border-color .2s}
+.card:hover{border-color:var(--accent2)}
+.card-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.card-sub{color:var(--muted);font-size:.82rem;line-height:1.6}
+.chip{display:inline-block;padding:2px 9px;border-radius:6px;font-size:.72rem;font-weight:600;letter-spacing:.04em}
+.chip-blue{background:rgba(0,212,255,.12);color:var(--accent)}
+.chip-purple{background:rgba(124,58,237,.18);color:#a78bfa}
+.chip-green{background:rgba(16,185,129,.12);color:var(--accent3)}
+.chip-yellow{background:rgba(245,158,11,.12);color:var(--warn)}
+.chip-red{background:rgba(239,68,68,.12);color:#f87171}
+
+/* SECTION TITLE */
+.sec-title{font-family:'Syne',sans-serif;font-weight:800;font-size:1.6rem;margin-bottom:6px}
+.sec-sub{color:var(--muted);font-size:.9rem;margin-bottom:28px}
+.divider{height:1px;background:var(--border);margin:30px 0}
+
+/* ROADMAP */
+.phase{display:flex;gap:20px;margin-bottom:28px;align-items:flex-start}
+.phase-dot{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:.85rem;flex-shrink:0;margin-top:4px}
+.phase-line{width:2px;background:var(--border);flex-shrink:0;margin-left:17px;margin-top:-8px;height:20px}
+.phase-content{flex:1}
+.phase-header{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.phase-name{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem}
+.phase-desc{color:var(--muted);font-size:.83rem;line-height:1.7}
+.items{display:flex;flex-direction:column;gap:5px;margin-top:10px}
+.item{display:flex;align-items:flex-start;gap:8px;font-size:.82rem;color:var(--muted)}
+.item::before{content:'→';color:var(--accent);flex-shrink:0;margin-top:1px}
+
+/* USM */
+.usm-table{width:100%;border-collapse:collapse;font-size:.82rem}
+.usm-table th{background:var(--surface2);padding:10px 14px;text-align:left;font-family:'Syne',sans-serif;font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;border:1px solid var(--border);color:var(--muted)}
+.usm-table td{padding:9px 14px;border:1px solid var(--border);vertical-align:top;line-height:1.55}
+.usm-table tr:hover td{background:var(--surface2)}
+.priority{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:5px}
+
+/* BACKLOG */
+.backlog-item{display:flex;align-items:flex-start;gap:14px;padding:14px 16px;background:var(--surface2);border-radius:10px;margin-bottom:8px;border-left:3px solid transparent;transition:border-color .2s}
+.backlog-item:hover{border-color:var(--accent2)}
+.bi-id{font-family:'Syne',sans-serif;font-weight:700;font-size:.75rem;color:var(--muted);min-width:46px}
+.bi-title{font-size:.88rem;font-weight:500;margin-bottom:3px}
+.bi-desc{font-size:.78rem;color:var(--muted);line-height:1.5}
+.bi-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.sp{display:flex;align-items:center;gap:3px;font-size:.75rem;color:var(--warn)}
+
+/* SPRINT */
+.sprint-row{display:grid;grid-template-columns:160px 1fr auto;gap:16px;align-items:start;padding:14px 0;border-bottom:1px solid var(--border)}
+.sprint-row:last-child{border-bottom:none}
+.sprint-label{font-family:'Syne',sans-serif;font-weight:700;font-size:.85rem}
+.sprint-date{font-size:.75rem;color:var(--muted);margin-top:2px}
+.sprint-items{display:flex;flex-direction:column;gap:5px}
+.sprint-task{font-size:.82rem;color:var(--muted);display:flex;align-items:center;gap:6px}
+.sprint-task::before{content:'';width:5px;height:5px;background:var(--accent2);border-radius:50%;flex-shrink:0}
+.sprint-pts{font-family:'Syne',sans-serif;font-weight:700;font-size:.85rem;color:var(--accent);text-align:right;white-space:nowrap}
+
+/* OBJ */
+.obj-card{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:18px;display:flex;gap:14px;align-items:flex-start}
+.obj-icon{font-size:1.4rem;flex-shrink:0;margin-top:2px}
+.obj-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;margin-bottom:4px}
+.obj-text{font-size:.82rem;color:var(--muted);line-height:1.6}
+.metric{font-weight:600;color:var(--accent)}
+
+/* SCROLL */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+@media(max-width:768px){
+  nav{padding:14px 18px;flex-wrap:wrap;gap:10px}
+  .tabs{flex-wrap:wrap}
+  .section{padding:24px 18px}
+  .g2,.g3{grid-template-columns:1fr}
+  .hero h1{font-size:2.1rem}
+  .sprint-row{grid-template-columns:1fr;gap:8px}
+  .usm-table{font-size:.75rem}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">OptiWallet</div>
+  <div class="tabs" id="tabs">
+    <button class="tab active" onclick="show('home',this)">Inicio</button>
+    <button class="tab" onclick="show('roadmap',this)">Roadmap</button>
+    <button class="tab" onclick="show('usm',this)">User Stories</button>
+    <button class="tab" onclick="show('backlog',this)">Backlog</button>
+    <button class="tab" onclick="show('sprints',this)">Sprints</button>
+    <button class="tab" onclick="show('objetivos',this)">Objetivos</button>
+  </div>
+  <div class="badge">Coming Soon</div>
+</nav>
+
+<!-- HOME -->
+<div class="section active" id="home">
+  <div class="hero">
+    <h1>Tu billetera,<br><span>inteligente.</span></h1>
+    <p>OptiWallet centraliza tus tarjetas y te dice exactamente cuál usar en cada compra, en cada comercio, cada día — maximizando descuentos, cashback y beneficios en Chile.</p>
+    <div class="coming-soon"><div class="dot"></div>En desarrollo activo</div>
+  </div>
+
+  <div class="grid g3" style="max-width:900px;margin:0 auto 40px">
+    <div class="card">
+      <div class="card-title">💳 Centralización</div>
+      <div class="card-sub">Registra todas tus tarjetas. Sin datos bancarios sensibles — solo qué tarjetas tienes y sus beneficios.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">🎯 Motor de Recomendación</div>
+      <div class="card-sub">Te dice qué tarjeta usar hoy en cada comercio según promociones vigentes, día de la semana y tope de descuento.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">📊 Costos de Mantención</div>
+      <div class="card-sub">Calcula si tu tarjeta vale la pena considerando costo anual vs beneficios reales obtenidos.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">📅 Fecha de Facturación</div>
+      <div class="card-sub">Gestiona cuándo te cobran para optimizar el flujo de caja y no pagar intereses innecesarios.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">🔮 Predicción Avanzada <span class="chip chip-purple" style="font-size:.65rem">Pro</span></div>
+      <div class="card-sub">Basada en tu historial de uso: ¿te conviene activar una nueva tarjeta? Estimación de beneficios futuros vs costo presente.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">🛡️ Privacidad Total</div>
+      <div class="card-sub">Nunca pedimos credenciales bancarias. Tú controlas qué información compartes.</div>
+    </div>
+  </div>
+
+  <div style="max-width:900px;margin:0 auto">
+    <div class="divider"></div>
+    <div class="sec-title" style="font-size:1.1rem;margin-bottom:20px">Estado del Proyecto</div>
+    <div class="grid g2">
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+          <div class="card-title" style="font-size:.85rem;margin:0">Fase actual</div>
+          <span class="chip chip-yellow">Fase 0 → 1</span>
+        </div>
+        <div class="items">
+          <div class="item">Landing page v1 completada ✓</div>
+          <div class="item">Modelo de datos en diseño</div>
+          <div class="item">MVP scope definido</div>
+          <div class="item">Stack tecnológico por decidir</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="margin-bottom:12px;font-size:.85rem">Métricas objetivo</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div style="text-align:center"><div style="font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:var(--accent)">40%</div><div style="font-size:.75rem;color:var(--muted)">Retención semana 2</div></div>
+          <div style="text-align:center"><div style="font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:var(--accent3)">&lt;5%</div><div style="font-size:.75rem;color:var(--muted)">Error en promos</div></div>
+          <div style="text-align:center"><div style="font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:var(--accent2)">500+</div><div style="font-size:.75rem;color:var(--muted)">Usuarios Beta</div></div>
+          <div style="text-align:center"><div style="font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:var(--warn)">40+</div><div style="font-size:.75rem;color:var(--muted)">NPS objetivo</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ROADMAP -->
+<div class="section" id="roadmap">
+  <div class="sec-title">Roadmap de Producto</div>
+  <div class="sec-sub">Fases secuenciales — la cadencia la define el equipo según disponibilidad</div>
+
+  <div class="phase">
+    <div>
+      <div class="phase-dot" style="background:linear-gradient(135deg,#374151,#4b5563);color:#9ca3af">0</div>
+    </div>
+    <div class="phase-content">
+      <div class="phase-header">
+        <span class="phase-name">Fase 0 — Fundaciones</span>
+        <span class="chip chip-green">✓ Parcial</span>
+      </div>
+      <div class="phase-desc">Definir el alcance exacto del MVP, lista de comercios y bancos iniciales, modelo de datos en papel y decisiones de stack.</div>
+      <div class="items">
+        <div class="item">Alcance MVP en una frase clara</div>
+        <div class="item">Top 30-50 comercios (Jumbo, Líder, Copec, Cinemark, Cruz Verde...)</div>
+        <div class="item">6 bancos iniciales: Banco Chile, Santander, BCI, Scotiabank, BancoEstado, CMR</div>
+        <div class="item">Diagrama ER: Usuario, Tarjeta, Banco, Comercio, Promoción, RecomendaciónHistórica</div>
+        <div class="item">Decisión de stack + monorepo</div>
+        <div class="item">Análisis legal preliminar (uso de marcas bancarias)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div>
+      <div class="phase-dot" style="background:linear-gradient(135deg,var(--accent),#0284c7);color:#fff">1</div>
+    </div>
+    <div class="phase-content">
+      <div class="phase-header">
+        <span class="phase-name">Fase 1 — Prototipo Interno</span>
+        <span class="chip chip-blue">En progreso</span>
+        <span class="chip chip-yellow">Sin usuarios externos</span>
+      </div>
+      <div class="phase-desc">Validar el concepto técnico end-to-end con datos mockeados. Demo interna como hito.</div>
+      <div class="items">
+        <div class="item">Esquema DB + seed con 20 comercios y 30 promos reales verificadas</div>
+        <div class="item">Motor de recomendación: función pura (tarjetas, comercio, fecha) → promos ordenadas</div>
+        <div class="item">Tests unitarios: días no vigentes, tarjeta no calificada, promos apilables vs excluyentes</div>
+        <div class="item">API mínima: GET /comercios, GET /recomendaciones, GET /promociones/:id</div>
+        <div class="item">Frontend harness de una pantalla para testear el motor</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div>
+      <div class="phase-dot" style="background:linear-gradient(135deg,var(--accent2),#6d28d9);color:#fff">2</div>
+    </div>
+    <div class="phase-content">
+      <div class="phase-header">
+        <span class="phase-name">Fase 2 — PWA Closed Beta</span>
+        <span class="chip chip-purple">Próximo</span>
+        <span class="chip chip-yellow">10–20 usuarios</span>
+      </div>
+      <div class="phase-desc">App instalable con onboarding, búsqueda de comercios y pantalla de recomendación. Solo equipo y cercanos.</div>
+      <div class="items">
+        <div class="item">Service Worker offline + manifest.json + PWA iOS/Android</div>
+        <div class="item">Onboarding: selección de tarjetas por banco</div>
+        <div class="item">Búsqueda con fuzzy search + categorías navegables</div>
+        <div class="item">Pantalla de recomendación: tarjeta ganadora + alternativas + condiciones</div>
+        <div class="item">Analytics privada (Plausible/Umami) + Sentry</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div>
+      <div class="phase-dot" style="background:linear-gradient(135deg,var(--accent3),#059669);color:#fff">3</div>
+    </div>
+    <div class="phase-content">
+      <div class="phase-header">
+        <span class="phase-name">Fase 3 — Operaciones de Datos</span>
+        <span class="chip chip-green">Crítico</span>
+      </div>
+      <div class="phase-desc">La base del producto real. Panel admin, proceso de captura y ciclo de frescura de promociones.</div>
+      <div class="items">
+        <div class="item">Panel admin CRUD con preview, bulk edit y log de cambios</div>
+        <div class="item">Proceso manual estructurado de captura de promos</div>
+        <div class="item">Scripts de monitoreo/diff semanal de páginas de beneficios bancarios</div>
+        <div class="item">Sistema de reporte de usuarios → cola de verificación humana</div>
+        <div class="item">Jobs diarios/semanales de expiración y re-verificación</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div>
+      <div class="phase-dot" style="background:linear-gradient(135deg,var(--warn),#d97706);color:#fff">4</div>
+    </div>
+    <div class="phase-content">
+      <div class="phase-header">
+        <span class="phase-name">Fase 4 — Open Beta Pública</span>
+        <span class="chip chip-yellow">500–1000 usuarios</span>
+      </div>
+      <div class="phase-desc">Abrir a usuarios desconocidos. Cuentas opcionales, motor mejorado, SEO y acquisition.</div>
+      <div class="items">
+        <div class="item">Cuentas con email / OAuth (magic links) — sin contraseña</div>
+        <div class="item">Motor v2: montos variables, promos apilables, ranking por ahorro absoluto vs %</div>
+        <div class="item">Historial de ahorro personal + favoritos + notificaciones push</div>
+        <div class="item">SEO: páginas por comercio ("mejores descuentos en Jumbo hoy")</div>
+        <div class="item">Lighthouse >90 mobile, bundle &lt;200KB gzipped</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div>
+      <div class="phase-dot" style="background:linear-gradient(135deg,#ec4899,#be185d);color:#fff">5</div>
+    </div>
+    <div class="phase-content">
+      <div class="phase-header">
+        <span class="phase-name">Fase 5 — Producto Maduro</span>
+        <span class="chip chip-purple">Futuro</span>
+      </div>
+      <div class="phase-desc">Features avanzadas, monetización, predicción ML y posible app nativa.</div>
+      <div class="items">
+        <div class="item">Comparador de cuotas: 3 sin interés vs 6 con 5% — ¿cuál conviene?</div>
+        <div class="item">Integración con ubicación: "estás cerca de Jumbo, hoy es 25% con Scotiabank"</div>
+        <div class="item">Predicción personalizada: activar tarjeta por estimación de beneficios futuros</div>
+        <div class="item">Monetización: Premium, afiliación de tarjetas, API pública</div>
+        <div class="item">App nativa iOS/Android + extensión de navegador para compras web</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- USER STORY MAP -->
+<div class="section" id="usm">
+  <div class="sec-title">User Story Map</div>
+  <div class="sec-sub">Actividades del usuario → tareas → historias de usuario priorizadas por release</div>
+
+  <div style="overflow-x:auto">
+  <table class="usm-table">
+    <thead>
+      <tr>
+        <th>🎯 Actividad</th>
+        <th>📋 Tarea</th>
+        <th>📦 Release 1 — MVP</th>
+        <th>🚀 Release 2 — Beta</th>
+        <th>⭐ Release 3 — Pro</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td rowspan="3"><strong>Registrar mis tarjetas</strong><br><span style="color:var(--muted);font-size:.78rem">Onboarding inicial</span></td>
+        <td>Seleccionar banco</td>
+        <td><span class="priority" style="background:var(--accent3)"></span>Como usuario quiero ver la lista de bancos disponibles para elegir mi emisor</td>
+        <td>Búsqueda de banco por nombre</td>
+        <td>Importar tarjetas por foto de plástico (OCR)</td>
+      </tr>
+      <tr>
+        <td>Elegir producto</td>
+        <td><span class="priority" style="background:var(--accent3)"></span>Como usuario quiero seleccionar qué tipo de tarjeta tengo (Visa Gold, Mastercard Black, etc.)</td>
+        <td>Añadir múltiples tarjetas del mismo banco</td>
+        <td>Sync entre dispositivos vía cuenta</td>
+      </tr>
+      <tr>
+        <td>Ingresar datos opcionales</td>
+        <td><span class="priority" style="background:var(--warn)"></span>Como usuario quiero indicar mi fecha de facturación para gestionar flujo de caja</td>
+        <td>Ingresar costo de mantención mensual/anual</td>
+        <td>Alertas de fecha de pago próxima</td>
+      </tr>
+      <tr>
+        <td rowspan="3"><strong>Buscar la mejor tarjeta</strong><br><span style="color:var(--muted);font-size:.78rem">Core del producto</span></td>
+        <td>Buscar comercio</td>
+        <td><span class="priority" style="background:var(--accent3)"></span>Como usuario quiero buscar un comercio por nombre y ver cuál de mis tarjetas da más descuento hoy</td>
+        <td>Autocompletado fuzzy + historial</td>
+        <td>Búsqueda por ubicación GPS</td>
+      </tr>
+      <tr>
+        <td>Ver recomendación</td>
+        <td><span class="priority" style="background:var(--accent3)"></span>Como usuario quiero ver la tarjeta recomendada con % de descuento, condiciones y días de vigencia</td>
+        <td>Comparar 2-3 alternativas en paralelo</td>
+        <td>Cálculo de ahorro con monto específico ingresado</td>
+      </tr>
+      <tr>
+        <td>Entender condiciones</td>
+        <td><span class="priority" style="background:var(--accent3)"></span>Como usuario quiero ver el tope de descuento y si aplica solo un día específico para no ir al comercio en vano</td>
+        <td>Promos apilables vs excluyentes indicadas</td>
+        <td>Notificación push de promos en favoritos</td>
+      </tr>
+      <tr>
+        <td rowspan="2"><strong>Reportar y confiar</strong><br><span style="color:var(--muted);font-size:.78rem">Confianza y calidad</span></td>
+        <td>Reportar error</td>
+        <td><span class="priority" style="background:var(--warn)"></span>Como usuario quiero reportar una promo caducada para que el equipo la actualice</td>
+        <td>Ver estado de mi reporte</td>
+        <td>Puntos de reputación por reportes correctos</td>
+      </tr>
+      <tr>
+        <td>Ver frescura del dato</td>
+        <td><span class="priority" style="background:var(--warn)"></span>Como usuario quiero ver cuándo fue verificada la promo para calibrar mi confianza</td>
+        <td>Indicador "verificada hace X días"</td>
+        <td>Badge de fuente oficial</td>
+      </tr>
+      <tr>
+        <td rowspan="2"><strong>Optimizar mi portafolio</strong><br><span style="color:var(--muted);font-size:.78rem">Valor avanzado</span></td>
+        <td>Analizar costos</td>
+        <td>—</td>
+        <td><span class="priority" style="background:var(--accent2)"></span>Como usuario quiero ver si mi tarjeta me conviene considerando mantención vs beneficios usados</td>
+        <td>Proyección anual de ahorro por tarjeta</td>
+      </tr>
+      <tr>
+        <td>Predicción de conveniencia</td>
+        <td>—</td>
+        <td>—</td>
+        <td><span class="priority" style="background:var(--accent2)"></span>Como usuario avanzado quiero saber si me conviene activar una tarjeta nueva basado en mi historial de uso</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="divider"></div>
+  <div class="grid g3" style="margin-top:20px">
+    <div style="display:flex;align-items:center;gap:8px"><span class="priority" style="background:var(--accent3);width:10px;height:10px;border-radius:50%;display:inline-block"></span><span style="font-size:.82rem;color:var(--muted)">Alta prioridad — MVP</span></div>
+    <div style="display:flex;align-items:center;gap:8px"><span class="priority" style="background:var(--warn);width:10px;height:10px;border-radius:50%;display:inline-block"></span><span style="font-size:.82rem;color:var(--muted)">Media prioridad — Beta</span></div>
+    <div style="display:flex;align-items:center;gap:8px"><span class="priority" style="background:var(--accent2);width:10px;height:10px;border-radius:50%;display:inline-block"></span><span style="font-size:.82rem;color:var(--muted)">Baja prioridad — Pro</span></div>
+  </div>
+</div>
+
+<!-- BACKLOG -->
+<div class="section" id="backlog">
+  <div class="sec-title">Sprint Backlog</div>
+  <div class="sec-sub">Product Backlog priorizado — estimado en Story Points (Fibonacci)</div>
+
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px" id="filters">
+    <button class="chip chip-blue" style="cursor:pointer;border:none;font-family:'DM Sans',sans-serif" onclick="filterItems('all',this)">Todos</button>
+    <button class="chip" style="cursor:pointer;border:none;font-family:'DM Sans',sans-serif;background:rgba(16,185,129,.12);color:var(--accent3)" onclick="filterItems('mvp',this)">MVP</button>
+    <button class="chip chip-purple" style="cursor:pointer;border:none;font-family:'DM Sans',sans-serif" onclick="filterItems('beta',this)">Beta</button>
+    <button class="chip chip-yellow" style="cursor:pointer;border:none;font-family:'DM Sans',sans-serif" onclick="filterItems('ops',this)">Operaciones</button>
+  </div>
+
+  <div id="backlog-list">
+    <div class="backlog-item" data-cat="mvp">
+      <div class="bi-id">US-001</div>
+      <div style="flex:1">
+        <div class="bi-title">Modelo de datos y esquema DB</div>
+        <div class="bi-desc">Diseñar y crear esquema PostgreSQL con entidades: Usuario, Tarjeta, Banco, Comercio, Promoción. Incluir seed data con 20 comercios y 30 promos de 3 bancos.</div>
+        <div class="bi-meta"><span class="chip chip-green">MVP</span><span class="chip chip-blue">Backend</span><div class="sp">⬛⬛⬛ 8 SP</div></div>
+      </div>
+    </div>
+    <div class="backlog-item" data-cat="mvp">
+      <div class="bi-id">US-002</div>
+      <div style="flex:1">
+        <div class="bi-title">Motor de recomendación v1</div>
+        <div class="bi-desc">Función pura que recibe (tarjetas_usuario, comercio_id, fecha) y devuelve promociones aplicables ordenadas. Manejar promos excluyentes vs apilables y topes de descuento.</div>
+        <div class="bi-meta"><span class="chip chip-green">MVP</span><span class="chip chip-blue">Backend</span><div class="sp">⬛⬛⬛ 13 SP</div></div>
+      </div>
+    </div>
+    <div class="backlog-item" data-cat="mvp">
+      <div class="bi-id">US-003</div>
+      <div style="flex:1">
+        <div class="bi-title">API REST mínima</div>
+        <div class="bi-desc">Endpoints: GET /comercios?q=, GET /recomendaciones?comercio_id=&tarjetas=, GET /promociones/:id. Sin autenticación. Documentación OpenAPI.</div>
+        <div class="bi-meta"><span class="chip chip-green">MVP</span><span class="chip chip-blue">Backend</span><div class="sp">⬛⬛ 5 SP</div></div>
+      </div>
+    </div>
+    <div class="backlog-item" data-cat="mvp">
+      <div class="bi-id">US-004</div>
+      <div style="flex:1">
+        <div class="bi-title">Onboarding: selección de tarjetas</div>
+        <div class="bi-desc">Pantalla de bienvenida + selector de tarjetas (banco → producto). Almacenar en localStorage. Dejar claro que no se piden datos bancarios sensibles.</div>
+        <div class="bi-meta"><span class="chip chip-green">MVP</span><span class="chip chip-purple">Frontend</span><div class="sp">⬛⬛ 5 SP</div></div>
+      </div>
+    </div>
+    <div class="backlog-item" data-cat="mvp">
+      <div class="bi-id">US-005</div>
+      <div style="flex:1">
+        <div class="bi-title">Búsqueda de comercios</div>
+        <div class="bi-desc">Input de búsqueda con autocompletado fuzzy sobre lista cacheada. Categorías navegables: Supermercados, Bencineras, Cines, Farmacias. Historial local.</div>
+        <div class="bi-meta"><span class="chip chip-green">MVP</span><span class="chip chip-purple">Frontend</span><div class="sp">⬛⬛ 5 SP</div></div>
+      </div>
+    </div>
+    <div class="backlog-item" data-cat="mvp">
+      <div class="bi-id">US-006</div>
+      <div style="flex:1">
+        <div class="bi-title">Pantalla de recomendación</div>
+        <div class="bi-desc">Tarjeta ganadora grande con tarjeta recomendada, % descuento, ahorro estimado y condiciones clave. Alternativas (2-3 opciones). Botón reportar promo caducada.</div>
+        <div class="bi-meta"><span class="chip chip-green">MVP</span><span class="chip chip-purple">Frontend</span><div class="sp">⬛⬛⬛ 8 SP</div></div>
+      </div>
+    </div>
+    <div class="backlog-item" data-cat="mvp">
+      <div class="bi-id">US-007</div>
+      <div style="flex:1">
+        <div class="bi-title">Setup PWA (Service Worker + Manifest)</div>
+        <div class="bi-desc">Configurar Service Worker para offline básico, manifest.json con íconos y splash. Verificar "Añadir a pantalla" en Safari iOS y Chrome Android.</div>
+        <div class="bi-meta"><span class="chip chip-green">MVP</span><span class="chip chip-purple">Frontend</span><div class="sp">⬛⬛ 5 SP</div></div>
+      </div>
+    </div>
+    <div class="backlog-item" data-cat="beta">
+      <div class="bi-id">US-008</div>
+      <div style="flex:1">
+        <div class="bi-title">Panel admin: CRUD de promociones</div>
+        <div class="bi-desc">Interface para agregar, editar, desactivar y marcar estado de promos. Preview de cómo se ve en la app. Log de cambios (quién, cuándo).</div>
+        <div class="bi-meta"><span class="chip chip-purple">Beta</span><span class="chip chip-yellow">Admin</span><div class="sp">⬛⬛⬛ 8 SP</div></div>
+      </div>
+    </div>
+    <div class="backlog-item" data-cat="ops">
+      <div class="bi-id">US-009</div>
+      <div style="flex:1">
+        <div class="bi-title">Jobs de frescura de datos</div>
+        <div class="bi-desc">Job diario que expira promos por fecha_fin. Job semanal de re-verificación de promos indefinidas. Dashboard interno de % promos verificadas últimos 7 días.</div>
+        <div class="bi-meta"><span class="chip chip-yellow">Operaciones</span><span class="chip chip-blue">Backend</span><div class="sp">⬛⬛ 5 SP</div></div>
+      </div>
+    </div>
+    <div class="backlog-item" data-cat="beta">
+      <div class="bi-id">US-010</div>
+      <div style="flex:1">
+        <div class="bi-title">Cuentas de usuario (opcional)</div>
+        <div class="bi-desc">Registro con email (magic links) u OAuth Google/Apple. Sync de tarjetas entre dispositivos. Sin contraseña. Nunca pedir datos bancarios.</div>
+        <div class="bi-meta"><span class="chip chip-purple">Beta</span><span class="chip chip-blue">Backend</span><span class="chip chip-purple">Frontend</span><div class="sp">⬛⬛⬛ 13 SP</div></div>
+      </div>
+    </div>
+    <div class="backlog-item" data-cat="beta">
+      <div class="bi-id">US-011</div>
+      <div style="flex:1">
+        <div class="bi-title">Análisis de conveniencia de tarjeta</div>
+        <div class="bi-desc">Mostrar si la tarjeta vale la pena: mantención anual vs descuentos efectivamente obtenidos. Fecha de facturación para optimizar flujo de caja.</div>
+        <div class="bi-meta"><span class="chip chip-purple">Beta</span><span class="chip chip-purple">Frontend</span><div class="sp">⬛⬛ 5 SP</div></div>
+      </div>
+    </div>
+    <div class="backlog-item" data-cat="ops">
+      <div class="bi-id">US-012</div>
+      <div style="flex:1">
+        <div class="bi-title">Sistema de reporte de usuarios</div>
+        <div class="bi-desc">Botón "Reportar promo" en la app. Reportes entran a cola de verificación, nunca se publican sin revisión. Sistema de reputación para reportadores correctos.</div>
+        <div class="bi-meta"><span class="chip chip-yellow">Operaciones</span><span class="chip chip-purple">Frontend</span><div class="sp">⬛⬛ 5 SP</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+  <div style="display:flex;gap:24px;flex-wrap:wrap">
+    <div style="text-align:center"><div style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;color:var(--accent)">85</div><div style="font-size:.78rem;color:var(--muted)">SP Totales</div></div>
+    <div style="text-align:center"><div style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;color:var(--accent3)">44</div><div style="font-size:.78rem;color:var(--muted)">SP MVP</div></div>
+    <div style="text-align:center"><div style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;color:var(--accent2)">26</div><div style="font-size:.78rem;color:var(--muted)">SP Beta</div></div>
+    <div style="text-align:center"><div style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;color:var(--warn)">15</div><div style="font-size:.78rem;color:var(--muted)">SP Operaciones</div></div>
+  </div>
+</div>
+
+<!-- SPRINTS -->
+<div class="section" id="sprints">
+  <div class="sec-title">Calendario de Sprints</div>
+  <div class="sec-sub">6 sprints de 2 semanas — Velocity estimada: 15-18 SP por sprint</div>
+
+  <div class="card" style="margin-bottom:20px">
+    <div class="sprint-row">
+      <div><div class="sprint-label" style="color:var(--accent)">Sprint 1</div><div class="sprint-date">Semanas 1–2<br><span class="chip chip-green" style="margin-top:4px;display:inline-block">Activo</span></div></div>
+      <div class="sprint-items">
+        <div class="sprint-task">Definir alcance MVP y lista de comercios/bancos (US-000)</div>
+        <div class="sprint-task">Diseño modelo de datos ER en papel</div>
+        <div class="sprint-task">Setup repositorio, CI/CD básico, convenciones de código</div>
+        <div class="sprint-task">Esquema PostgreSQL + primeras migraciones (US-001 parcial)</div>
+      </div>
+      <div class="sprint-pts">13 SP</div>
+    </div>
+    <div class="sprint-row">
+      <div><div class="sprint-label" style="color:var(--accent)">Sprint 2</div><div class="sprint-date">Semanas 3–4</div></div>
+      <div class="sprint-items">
+        <div class="sprint-task">Seed data: 20 comercios + 30 promos reales verificadas (US-001)</div>
+        <div class="sprint-task">Motor de recomendación v1 — función pura + tests unitarios (US-002)</div>
+        <div class="sprint-task">Tests edge cases: días, topes, excluyentes/apilables</div>
+      </div>
+      <div class="sprint-pts">18 SP</div>
+    </div>
+    <div class="sprint-row">
+      <div><div class="sprint-label" style="color:var(--accent2)">Sprint 3</div><div class="sprint-date">Semanas 5–6</div></div>
+      <div class="sprint-items">
+        <div class="sprint-task">API REST mínima + documentación OpenAPI (US-003)</div>
+        <div class="sprint-task">Frontend harness de prueba — una pantalla de simulación</div>
+        <div class="sprint-task"><strong>Hito Fase 1:</strong> Demo interna end-to-end ✓</div>
+      </div>
+      <div class="sprint-pts">13 SP</div>
+    </div>
+    <div class="sprint-row">
+      <div><div class="sprint-label" style="color:var(--accent2)">Sprint 4</div><div class="sprint-date">Semanas 7–8</div></div>
+      <div class="sprint-items">
+        <div class="sprint-task">Setup PWA: Service Worker + Manifest + íconos (US-007)</div>
+        <div class="sprint-task">Onboarding: selector de banco y tarjetas (US-004)</div>
+        <div class="sprint-task">Búsqueda de comercios con fuzzy search (US-005)</div>
+      </div>
+      <div class="sprint-pts">15 SP</div>
+    </div>
+    <div class="sprint-row">
+      <div><div class="sprint-label" style="color:var(--accent3)">Sprint 5</div><div class="sprint-date">Semanas 9–10</div></div>
+      <div class="sprint-items">
+        <div class="sprint-task">Pantalla de recomendación completa (US-006)</div>
+        <div class="sprint-task">Setup analytics (Plausible) + error tracking (Sentry)</div>
+        <div class="sprint-task">Deploy a producción — acceso closed beta</div>
+        <div class="sprint-task"><strong>Hito Fase 2:</strong> 10-20 personas instalando la PWA ✓</div>
+      </div>
+      <div class="sprint-pts">16 SP</div>
+    </div>
+    <div class="sprint-row" style="border-bottom:none">
+      <div><div class="sprint-label" style="color:var(--warn)">Sprint 6</div><div class="sprint-date">Semanas 11–12</div></div>
+      <div class="sprint-items">
+        <div class="sprint-task">Panel admin CRUD de promociones (US-008)</div>
+        <div class="sprint-task">Jobs de frescura: expiración diaria + re-verificación semanal (US-009)</div>
+        <div class="sprint-task">Sistema de reporte de usuarios (US-012)</div>
+        <div class="sprint-task"><strong>Hito Fase 3:</strong> 200+ promos &lt;5% error ✓</div>
+      </div>
+      <div class="sprint-pts">18 SP</div>
+    </div>
+  </div>
+
+  <div class="grid g2" style="margin-top:16px">
+    <div class="card">
+      <div class="card-title" style="font-size:.85rem">Definition of Done</div>
+      <div class="items" style="margin-top:8px">
+        <div class="item">Código revisado y mergeado a main</div>
+        <div class="item">Tests unitarios pasando (&gt;80% cobertura en motor)</div>
+        <div class="item">Documentado en OpenAPI o README</div>
+        <div class="item">Desplegado en staging y probado manualmente</div>
+        <div class="item">Retrospectiva registrada en el board</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="font-size:.85rem">Ceremonias Scrum</div>
+      <div class="items" style="margin-top:8px">
+        <div class="item">Sprint Planning: 1h al inicio de cada sprint</div>
+        <div class="item">Daily standup: 15 min (async si el equipo lo prefiere)</div>
+        <div class="item">Sprint Review: demo al final + actualizar métricas</div>
+        <div class="item">Retrospectiva: 30 min mensual — qué va bien / mal</div>
+        <div class="item">Refinamiento de backlog: 30 min a mitad de sprint</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- OBJETIVOS -->
+<div class="section" id="objetivos">
+  <div class="sec-title">Objetivos de Producto</div>
+  <div class="sec-sub">Objetivos medibles alineados a cada fase del roadmap</div>
+
+  <div style="display:grid;gap:14px;margin-bottom:30px">
+    <div class="obj-card">
+      <div class="obj-icon">🎯</div>
+      <div>
+        <div class="obj-title">OBJ-1 — Validación Técnica <span class="chip chip-green" style="margin-left:6px">Sprint 1–3</span></div>
+        <div class="obj-text">Demostrar que el motor de recomendación funciona end-to-end con datos reales de al menos 3 bancos. <span class="metric">Métrica: demo interna exitosa, tests unitarios con &gt;80% cobertura, 0 errores en casos edge identificados.</span></div>
+      </div>
+    </div>
+    <div class="obj-card">
+      <div class="obj-icon">📱</div>
+      <div>
+        <div class="obj-title">OBJ-2 — PWA Instalable <span class="chip chip-blue" style="margin-left:6px">Sprint 4–5</span></div>
+        <div class="obj-text">Tener una app que el equipo y cercanos puedan instalar en iOS y Android, completar el onboarding y recibir una recomendación real en menos de 30 segundos. <span class="metric">Métrica: 10-20 usuarios en closed beta, retención semana 2 &gt;40%.</span></div>
+      </div>
+    </div>
+    <div class="obj-card">
+      <div class="obj-icon">🗄️</div>
+      <div>
+        <div class="obj-title">OBJ-3 — Datos Confiables <span class="chip chip-yellow" style="margin-left:6px">Sprint 6+</span></div>
+        <div class="obj-text">Mantener una base de 200+ promociones verificadas manualmente con proceso documentado de captura, actualización y expiración. <span class="metric">Métrica: tasa de error reportada por usuarios &lt;5%, 100% de promos con fecha de verificación.</span></div>
+      </div>
+    </div>
+    <div class="obj-card">
+      <div class="obj-icon">📈</div>
+      <div>
+        <div class="obj-title">OBJ-4 — Adopción Beta Pública <span class="chip chip-purple" style="margin-left:6px">Fase 4</span></div>
+        <div class="obj-text">Abrir a usuarios desconocidos con cuentas opcionales y lograr tracción orgánica a través de SEO (páginas por comercio) y comunidades de ofertas en Chile. <span class="metric">Métrica: 500-1.000 usuarios activos semanales, NPS medible.</span></div>
+      </div>
+    </div>
+    <div class="obj-card">
+      <div class="obj-icon">🔮</div>
+      <div>
+        <div class="obj-title">OBJ-5 — Predicción Personalizada <span class="chip chip-purple" style="margin-left:6px">Fase 5</span></div>
+        <div class="obj-text">Para usuarios con historial suficiente (&gt;3 meses), ofrecer recomendación de activación de tarjeta basada en estimación de beneficios futuros vs costo presente de mantención. <span class="metric">Métrica: NPS &gt;40, tasa de adopción feature Pro &gt;15%.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+  <div class="sec-title" style="font-size:1.1rem;margin-bottom:16px">Objetivos por Sprint</div>
+  <div class="grid g2">
+    <div class="card">
+      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.8rem;color:var(--accent);margin-bottom:10px">SPRINTS 1–2</div>
+      <div class="bi-title" style="margin-bottom:6px">Cimientos técnicos sólidos</div>
+      <div class="card-sub">Al final del sprint 2, el equipo tiene la base de datos poblada, el motor de recomendación funcionando con tests y puede ejecutar una query completa desde código.</div>
+    </div>
+    <div class="card">
+      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.8rem;color:var(--accent2);margin-bottom:10px">SPRINT 3</div>
+      <div class="bi-title" style="margin-bottom:6px">Primera demo end-to-end</div>
+      <div class="card-sub">Cualquier miembro del equipo puede abrir un navegador, buscar "Jumbo", y ver qué tarjeta recomienda el sistema con datos reales. Hito Fase 1 completado.</div>
+    </div>
+    <div class="card">
+      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.8rem;color:var(--accent3);margin-bottom:10px">SPRINTS 4–5</div>
+      <div class="bi-title" style="margin-bottom:6px">App real en el teléfono</div>
+      <div class="card-sub">Al menos 10 personas tienen la PWA instalada en su teléfono, completaron el onboarding solos (sin ayuda) y recibieron su primera recomendación. Retención medida.</div>
+    </div>
+    <div class="card">
+      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.8rem;color:var(--warn);margin-bottom:10px">SPRINT 6</div>
+      <div class="bi-title" style="margin-bottom:6px">Operaciones autosustentables</div>
+      <div class="card-sub">El equipo puede agregar una promo nueva en &lt;5 minutos con el panel admin. Los jobs automáticos mantienen la base limpia. Los usuarios pueden reportar errores.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+function show(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function filterItems(cat, btn) {
+  document.querySelectorAll('#filters button').forEach(b => {
+    b.style.opacity = '.5';
+  });
+  btn.style.opacity = '1';
+  document.querySelectorAll('.backlog-item').forEach(item => {
+    if (cat === 'all' || item.dataset.cat === cat) {
+      item.style.display = 'flex';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+</script>
+</body>
+</html>
